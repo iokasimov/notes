@@ -1,4 +1,4 @@
-# Scrap your parentheses: new operator for providing arguments
+# Scrap your parentheses: operator for providing arguments
 
 In most of modern programming languages parentheses are used as a function application operator to its arguments: 
 
@@ -17,7 +17,7 @@ z :: y
 q x y z
 ```
 
-Buy wait a minute! We apply function `g` to some arguments, but there are more space characters than one. Doesn't it mean that we have more than one function application? Well, yes:
+Buy wait a minute! We apply function `q` to some arguments, but there are more space characters than one. Doesn't it mean that we have more than one function application? Well, yes:
 
 ```haskell
 (((q x) y) z)
@@ -48,7 +48,7 @@ q :: a -> b -> (b -> c) -> b -> ???
 q x y p y
 ```
 
-Fortunately, we already have a special infix operator in `base` that can help us remove parentheses:
+Fortunately, we already have a special infix operator in `base` that can help us to remove parentheses:
 
 ```haskell
 q :: a -> b -> c -> d
@@ -68,7 +68,7 @@ o :: d -> e
 o (q x y $ p y) === o $ q x y $ p y
 ```
 
-Looks good! But what if instead of providing arguments explicitly we could just somehow combine functions together without mentioning any arguments?
+Looks good! But what if instead of providing arguments explicitly we could just somehow combine functions together without mentioning any arguments? There is change you have already seen such an image when you started to learn functional programming:
 
 ![...](https://hsto.org/getpro/habr/upload_files/198/bb3/99a/198bb399acc2fe0dd0b978ed2aa99914.jpeg)
 > "What is a Category? Definition and Examples" (c) Math3ma"
@@ -85,7 +85,7 @@ g . f :: a -> c
 g (f x) === g . f
 ```
 
-A choice between composition and application is often a question about stylistic preferences because they are structurally equal:
+A choice between composition (`.`) and application (`$`) is often a question about stylistic preferences because they are structurally equal:
 
 ```haskell
 g . f === g $ f x
@@ -135,12 +135,6 @@ So if we want to introduce a new operator that could consume several arguments a
 ((??? x) y) z) ...
 ```
 
-Let's take some known function from `base` to test our new operator, `maybe` for example:
-
-```haskell
-maybe :: b -> (a -> b) -> Maybe a -> b
-```
-
 Now let's choose some ASCII symbol as name for our new operator that seems to be not widely used.
 
 ```haskell
@@ -173,7 +167,7 @@ But how could we define it? Actually it's an application operator in the essence
 f # x = f x
 ```
 
-So... how it's gonna work? Let's take an example with `maybe`. Since we have functions in curried form we can provide arguments one by one:
+So... how it's gonna work? Let's take some known function from `base` to test our new operator, `maybe` for example. Since we have functions in curried form we can provide arguments one by one:
 
 ```haskell
 maybe :: b -> (a -> b) -> Maybe a -> b
@@ -182,7 +176,7 @@ maybe x f :: Maybe a -> b
 maybe x f ma :: b
 ```
 
-Currying means that we can group parentheses to the left! 
+Currying means that we can group parentheses to the left:
 
 ```haskell
 maybe # x # f # ma === ((maybe # x) # f) # ma
